@@ -1,0 +1,34 @@
+name: .NET CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🛠 Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: 📦 Setup .NET SDK
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0'  # Change to your .NET version if needed
+
+      - name: 📂 Move to Project Directory
+        run: cd WebApplication1  # Navigate to the project folder
+
+      - name: 📦 Restore Dependencies
+        run: dotnet restore WebApplication1.sln  # Restore using the solution file
+
+      - name: 🏗 Build Project
+        run: dotnet build --no-restore WebApplication1.sln  # Build the solution
+
+      - name: ✅ Run Tests
+        run: dotnet test --no-build --verbosity normal WebApplication1.sln  # Run tests
